@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# logins
+
+function help()
+{ 
+  echo "logins [-ht]"
+}
+
+
+SORTF=1
+  case "$1" in
+    -h) help
+        exit
+        ;;
+    -t) SORTF=3
+        SORTC=-n
+        ;;
+    -x)         
+        ;;
+     *)         
+        ;;
+  esac
+getent passwd | sort -k "$SORTF" -t : $SORTC | 
+while read LINE
+do
+  login=`echo "$LINE" | cut -f 1 -d :`
+  uid=`echo "$LINE" | cut -f 3 -d :`
+  gid=`echo "$LINE" | cut -f 4 -d :`
+  gecos=`echo "$LINE" | cut -f 5 -d :`
+  if [ -x = "$1" ]
+  then
+    home=`echo "$LINE" | cut -f 6 -d :`
+    shell=`echo "$LINE" | cut -f 7 -d :`
+    echo -e "\t\t\t${home}"
+    echo -e "\t\t\t${shell}"
+  fi
+
+  echo -e "${login}\t${uid}\t${gid}\t${gecos}"
+done
+
